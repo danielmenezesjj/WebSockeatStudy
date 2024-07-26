@@ -30,7 +30,7 @@ public class JsonWebTokenProvider implements TokenProvider{
                 .getExpiresAtAsInstant()
                 .atZone(ZoneId.systemDefault())
                 .isBefore(ZonedDateTime.now());
-        if(expired) throw new RuntimeException("token expirado");
+        if(expired) throw new RuntimeException("token is expired");
         return Map.of(
                 "id", jwt.getSubject(),
                 "name", jwt.getClaim("name").asString(),

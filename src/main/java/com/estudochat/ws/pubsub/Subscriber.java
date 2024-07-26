@@ -27,25 +27,21 @@ public class Subscriber {
     private WebSocketHandler webSocketHandler;
 
     @PostConstruct
-    private void init(){
+    private void init() {
         this.redisTemplate
                 .listenTo(ChannelTopic.of(RedisConfig.CHAT_MESSAGES_CHANNEL))
                 .map(ReactiveSubscription.Message::getMessage)
                 .subscribe(this::onChatMessage);
     }
 
-    private void onChatMessage(final String chatMessageSerialized){
+    private void onChatMessage(final String chatMessageSerialized) {
         LOGGER.info("chat message was received");
-
-        try{
+        try {
             ChatMessage chatMessage = new ObjectMapper().readValue(chatMessageSerialized, ChatMessage.class);
             webSocketHandler.notify(chatMessage);
-        }catch (JsonProcessingException e){
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
-
     }
-
 }

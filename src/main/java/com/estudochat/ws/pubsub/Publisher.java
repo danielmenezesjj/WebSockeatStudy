@@ -22,10 +22,9 @@ public class Publisher {
     private UserRepository userRepository;
 
     @Autowired
-
     private ReactiveStringRedisTemplate redisTemplate;
 
-    public void publishChatMessage(String userIdFrom, String userIdTo, String text)throws JsonProcessingException{
+    public void publishChatMessage(String userIdFrom, String userIdTo, String text) throws JsonProcessingException {
         User from = userRepository.findById(userIdFrom).orElseThrow();
         User to = userRepository.findById(userIdTo).orElseThrow();
         ChatMessage chatMessage = new ChatMessage(from, to, text);
@@ -35,5 +34,4 @@ public class Publisher {
                 .subscribe();
         LOGGER.info("chat message was published");
     }
-
 }

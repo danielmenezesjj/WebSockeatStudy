@@ -7,11 +7,10 @@ import java.util.logging.Logger;
 
 @RestController
 public class HealthCheckController {
-
     private final static Logger LOGGER = Logger.getLogger(HealthCheckController.class.getName());
 
     @GetMapping
-    void healthCheck(){LOGGER.info("health check");}
-
-
+    void healthCheck() {
+        LOGGER.info("health check");
+    }
 }

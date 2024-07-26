@@ -13,30 +13,28 @@ import java.net.URL;
 import java.security.PublicKey;
 
 @Component
-public class JsonWebKeyProvider implements KeyProvider{
-
+public class JsonWebKeyProvider implements KeyProvider {
 
     private final UrlJwkProvider provider;
 
-    public JsonWebKeyProvider(@Value("${app.auth.jwks-url}") final String jwksUrl) throws MalformedURLException {
-        try{
+    public JsonWebKeyProvider(@Value("${app.auth.jwks-url}") final String jwksUrl) {
+        try {
             this.provider = new UrlJwkProvider(new URL(jwksUrl));
-        }catch (MailAuthenticationException e){
+        } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
-    @Cacheable("public-key")
     @Override
-    public PublicKey getPublicKey(String keyId) throws JwkException {
-        try{
+    @Cacheable("public-key")
+    public PublicKey getPublicKey(String keyId) {
+        try {
             final Jwk jwk = provider.get(keyId);
             return jwk.getPublicKey();
-        }catch (InvalidPublicKeyException e){
+        } catch (JwkException e) {
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
-
     }
 }

@@ -8,3 +8,4 @@ import java.lang.annotation.Documented;
 @Document(collection = "user")
 public record User(String id, String name, String picture) {
 }
+

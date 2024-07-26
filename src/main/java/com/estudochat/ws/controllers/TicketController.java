@@ -23,7 +23,6 @@ public class TicketController {
             @RequestHeader(HttpHeaders.AUTHORIZATION)
             String authorization
     ) throws JwkException {
-        System.out.println("Caiu aqui");
         String token = Optional
                 .ofNullable(authorization)
                 .map(it -> it.replace("Bearer ", ""))

@@ -42,7 +42,6 @@ public class TicketService {
     }
 
     public Optional<String> getUserIdByTicket(String ticket){
-        return Optional.of(redisTemplate.opsForValue().getAndDelete(ticket));
+        return Optional.ofNullable(redisTemplate.opsForValue().getAndDelete(ticket));
     }
-
 }

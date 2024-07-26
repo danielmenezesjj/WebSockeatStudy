@@ -5,6 +5,7 @@ import com.estudochat.ws.data.User;
 import com.estudochat.ws.dto.ChatMessage;
 import com.estudochat.ws.events.Event;
 import com.estudochat.ws.events.EventType;
+import com.estudochat.ws.pubsub.Publisher;
 import com.estudochat.ws.services.TicketService;
 import com.estudochat.ws.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,14 +31,21 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     private final TicketService ticketService;
 
+    private final Publisher publisher;
     private final Map<String, WebSocketSession> sessions;
     private final Map<String, String> userIds;
 
     @Autowired
     private UserService userService;
 
-    public WebSocketHandler(TicketService ticketService){
+    public WebSocketHandler(
+            TicketService ticketService,
+            Publisher publisher,
+            UserService userService
+    ) {
         this.ticketService = ticketService;
+        this.publisher = publisher;
+        this.userService = userService;
         sessions = new ConcurrentHashMap<>();
         userIds = new ConcurrentHashMap<>();
     }
@@ -87,10 +95,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
-        LOGGER.info("[handleTextMessage] message " + message.getPayload());
+        LOGGER.info("[handleTextMessage] message teste Messege " + message.getPayload());
         if(message.getPayload().equals("ping")){session.sendMessage(new TextMessage("pong")); return;}
         MessagePayload payload = new ObjectMapper().readValue(message.getPayload(), MessagePayload.class);
         String userIdFrom = userIds.get(session.getId());
+        publisher.publishChatMessage(userIdFrom, payload.to(), payload.text());
     }
 
     @Override

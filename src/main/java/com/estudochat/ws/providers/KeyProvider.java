@@ -6,6 +6,6 @@ import java.security.PublicKey;
 
 public interface KeyProvider {
 
-    PublicKey getPublicKey(String keyId) throws JwkException;
+    PublicKey getPublicKey(String keyId);
 
 }

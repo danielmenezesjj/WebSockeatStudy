@@ -32,7 +32,7 @@ public class TicketService {
         String ticket = UUID.randomUUID().toString();
         Map<String, String> user = tokenProvider.decode(token);
         String userId = user.get("id");
-        redisTemplate.opsForValue().set(ticket, userId, Duration.ofSeconds(10L));
+        redisTemplate.opsForValue().set(ticket, userId, Duration.ofSeconds(60000L));
         saveUser(user);
         return ticket;
     }
